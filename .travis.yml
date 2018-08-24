@@ -1,0 +1,32 @@
+sudo: required
+
+language: node_js
+
+node_js:
+- '10'
+
+cache:
+  directories:
+  - ~/.npm
+
+notifications:
+  email: true
+
+before_install:
+- npm install -g yarn@latest
+
+install:
+- yarn install
+
+script:
+- yarn lint
+- yarn test --coverage
+- yarn build
+- yarn coveralls
+
+after_success:
+- yarn travis-deploy-once "yarn semantic-release"
+
+branches:
+  except:
+  - /^v\d+\.\d+\.\d+$/
